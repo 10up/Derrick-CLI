@@ -1,0 +1,15 @@
+{
+  "name": "moonshine-cli",
+  "version": "0.1.0",
+  "description": "Command line interface to moonshine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:johnpbloch/moonshine-cli.git"
+  },
+  "author": "",
+  "license": "MIT"
+}
