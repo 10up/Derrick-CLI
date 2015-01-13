@@ -26,7 +26,7 @@ function connectToServer(port, onConnect) {
 
 	var location = url.format({
 		protocol: 'http',
-		hostname: 'moonshine',
+		hostname: 'moonshine.dev',
 		port    : port
 	});
 
