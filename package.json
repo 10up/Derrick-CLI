@@ -16,6 +16,6 @@
     "jshint": "^2.5.11"
   },
   "bin": {
-    "moonshine": "./moonshine.js"
+    "moonshine": "./bin/moonshine.js"
   }
 }
