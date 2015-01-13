@@ -11,5 +11,8 @@
     "url": "git@bitbucket.org:johnpbloch/moonshine-cli.git"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jshint": "^2.5.11"
+  }
 }
