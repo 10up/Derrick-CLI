@@ -2,9 +2,15 @@ var sockets = {},
 		io = require('socket.io-client'),
 		url = require('url');
 
-module.exports = function (port) {
+module.exports = function (port, onConnect) {
 	"use strict";
+	if ("function" === typeof port) {
+		onConnect = port;
+		port = 239;
+	}
 	port = port || 239;
+	onConnect = onConnect || function () {
+	};
 	var location = url.format({
 				protocol: 'http',
 				hostname: 'moonshine',
@@ -22,6 +28,7 @@ module.exports = function (port) {
 	socket = sockets[location].sock;
 	socket.on('connect', function () {
 		sockets[location].connecting = false;
+		onConnect.apply(socket, arguments);
 	});
 	socket.on('error', function () {
 		sockets[location].connecting = false;
