@@ -5,11 +5,11 @@
   "main": "./src/index.js",
   "scripts": {
     "build:bin": "jshint bin/",
-    "watch:bin": "watch 'npm run build:bin' bin/",
+    "watch:bin": "watch \"npm run build:bin\" bin/",
     "build:src": "jshint src/",
-    "watch:src": "watch 'npm run build:src' src/",
+    "watch:src": "watch \"npm run build:src\" src/",
     "build": "npm run build:bin && npm run build:src",
-    "build:watch": "parallelshell 'npm run watch:bin' 'npm run watch:src'"
+    "build:watch": "parallelshell \"npm run watch:bin\" \"npm run watch:src\""
   },
   "repository": {
     "type": "git",
