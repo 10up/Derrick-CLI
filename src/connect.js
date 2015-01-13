@@ -2,7 +2,15 @@ var sockets = {},
 		io = require('socket.io-client'),
 		url = require('url');
 
-module.exports = function (port, onConnect) {
+module.exports = connectToServer;
+
+/**
+ * Connect to the server
+ * @param {number=} port Defaults to 239
+ * @param {function=} onConnect Optional function to run on connect
+ * @returns {*}
+ */
+function connectToServer(port, onConnect) {
 	"use strict";
 	if ("function" === typeof port) {
 		onConnect = port;
@@ -34,4 +42,4 @@ module.exports = function (port, onConnect) {
 		sockets[location].connecting = false;
 	});
 	return socket;
-};
+}
