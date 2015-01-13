@@ -4,7 +4,7 @@
   "description": "Command line interface to moonshine",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "jshint src/ bin/"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "bin": {
     "moonshine": "./bin/moonshine.js"
   },
-  "scripts": {
-    "lint": "jshint src/ bin/"
+  "dependencies": {
+    "socket.io-client": "^1.2.1"
   }
 }
