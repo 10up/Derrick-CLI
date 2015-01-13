@@ -50,8 +50,9 @@ function connectToServer(port, onConnect) {
 		onConnect.apply(socket, arguments);
 	});
 
-	socket.on('error', function () {
+	socket.on('error', function (er) {
 		sockets[location].connecting = false;
+		throw er;
 	});
 
 	return socket;
