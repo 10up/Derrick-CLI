@@ -4,7 +4,12 @@
   "description": "Command line interface to moonshine",
   "main": "./src/index.js",
   "scripts": {
-    "lint": "jshint src/ bin/"
+    "build:bin": "jshint bin/",
+    "watch:bin": "watch 'npm run build:bin' bin/",
+    "build:src": "jshint src/",
+    "watch:src": "watch 'npm run build:src' src/",
+    "build": "npm run build:bin && npm run build:src",
+    "build:watch": "parallelshell 'npm run watch:bin' 'npm run watch:src'"
   },
   "repository": {
     "type": "git",
@@ -13,7 +18,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "jshint": "^2.5.11"
+    "jshint": "^2.5.11",
+    "parallelshell": "^1.0.3",
+    "watch": "^0.13.0"
   },
   "bin": {
     "moonshine": "./bin/moonshine.js"
