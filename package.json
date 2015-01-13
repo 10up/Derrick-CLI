@@ -17,5 +17,8 @@
   },
   "bin": {
     "moonshine": "./bin/moonshine.js"
+  },
+  "scripts": {
+    "lint": "jshint src/ bin/"
   }
 }
