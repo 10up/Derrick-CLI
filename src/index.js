@@ -1,5 +1,9 @@
 module.exports = {
 
-	connect: require("./connect")
+	command: require("./command"),
+
+	connect: require("./connect"),
+
+	import: require("./import")
 
 };
