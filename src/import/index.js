@@ -1,7 +1,7 @@
 var util = require('util'),
 		path = require('path'),
 		resolve = require('./resolve'),
-		VM = require('./vm'),
+		VM = require('../vm'),
 		mkdirp = require('mkdirp');
 
 module.exports = doImport;
@@ -63,4 +63,5 @@ function parseConfig(thing) {
 			};
 	mkdirp(project, errorCase);
 	mkdirp(cache, errorCase);
+
 }
