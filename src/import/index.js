@@ -63,5 +63,4 @@ function parseConfig(thing) {
 			};
 	mkdirp(project, errorCase);
 	mkdirp(cache, errorCase);
-
 }
