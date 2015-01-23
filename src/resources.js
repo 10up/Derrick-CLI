@@ -88,6 +88,16 @@ VcsResource.prototype.install = function (where) {
 				});
 			});
 		case 'svn':
-			break;
+			return new NPromise(function (resolve, reject) {
+				var checkout = spawn('svn', ['checkout', that.url, where], {stdio: 'inherit'});
+				checkout.on('error', reject);
+				checkout.on('close', function (code) {
+					if (code > 0) {
+						reject('SVN exited with non-zero code!');
+					} else {
+						resolve(true);
+					}
+				});
+			});
 	}
 };
