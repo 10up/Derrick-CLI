@@ -81,7 +81,7 @@ function parseConfig(thing) {
 	var resourcePromises = [];
 	try {
 		for (x = 0; x < data.dev_resources.length; x += 1) {
-			var resource = new resources.VcsResource(data.dev_resources[x]);
+			var resource = resources.VcsResource.newFromVcs(data.dev_resources[x]);
 			mkdirp.sync(path.dirname(path.join(project, resource.path)));
 			util.print(util.format('Fetching %s...\n', resource.name));
 			resourcePromises.push(resource.install(path.join(project, resource.path)));

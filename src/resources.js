@@ -55,6 +55,9 @@ Resource.prototype.install = function (where) {
 
 function VcsResource(info) {
 	"use strict";
+	if (this.constructor === VcsResource) {
+		throw new Error('This is an abstract class!');
+	}
 	checkProp(info, 'url', 'string');
 	if (!info.vcs || 'svn' !== info.vcs) {
 		info.vcs = 'git';
@@ -64,6 +67,7 @@ function VcsResource(info) {
 	}
 	this.url = info.url;
 	this.vcs = info.vcs;
+	this.ref = info.ref || '';
 	Resource.call(this, info);
 }
 
@@ -71,33 +75,71 @@ VcsResource.prototype = Object.create(Resource.prototype);
 VcsResource.prototype.constructor = VcsResource;
 VcsResource.prototype.url = '';
 VcsResource.prototype.vcs = '';
+VcsResource.prototype.ref = '';
 VcsResource.prototype.install = function (where) {
 	"use strict";
-	var that = this;
-	switch (this.vcs) {
+};
+VcsResource.newFromVcs = function (info) {
+	"use strict";
+	var resource;
+	info.vcs = info.vcs || 'git';
+	switch (info.vcs) {
 		case 'git':
-			return new NPromise(function (resolve, reject) {
-				var clone = spawn('git', ['clone', '-q', that.url, where], {stdio: 'inherit'});
-				clone.on('error', reject);
-				clone.on('close', function (code) {
-					if (code > 0) {
-						reject('Git exited with non-zero code!');
-					} else {
-						resolve(true);
-					}
-				});
-			});
+			resource = new GitResource(info);
+			break;
 		case 'svn':
-			return new NPromise(function (resolve, reject) {
-				var checkout = spawn('svn', ['checkout', '-q', that.url, where], {stdio: 'inherit'});
-				checkout.on('error', reject);
-				checkout.on('close', function (code) {
-					if (code > 0) {
-						reject('SVN exited with non-zero code!');
-					} else {
-						resolve(true);
-					}
-				});
-			});
+			resource = new SvnResource(info);
+			break;
+		default:
+			throw new Error('invalid vcs type!');
 	}
+	return resource;
+};
+
+function GitResource(info) {
+	"use strict";
+	info.ref = info.ref || 'master';
+	VcsResource.call(this, info);
+}
+
+GitResource.prototype = Object.create(VcsResource.prototype);
+GitResource.prototype.constructor = GitResource;
+GitResource.prototype.install = function (where) {
+	"use strict";
+	var that = this;
+	return new NPromise(function (resolve, reject) {
+		var clone = spawn('git', ['clone', '-q', that.url, where], {stdio: 'inherit'});
+		clone.on('error', reject);
+		clone.on('close', function (code) {
+			if (code > 0) {
+				reject('Git exited with non-zero code!');
+			} else {
+				resolve(true);
+			}
+		});
+	});
+};
+
+function SvnResource(info) {
+	"use strict";
+	info.ref = undefined === info.ref ? 'trunk' : info.ref;
+	VcsResource.call(this, info);
+}
+
+SvnResource.prototype = Object.create(VcsResource.prototype);
+SvnResource.prototype.constructor = SvnResource;
+SvnResource.prototype.install = function (where) {
+	"use strict";
+	var that = this;
+	return new NPromise(function (resolve, reject) {
+		var checkout = spawn('svn', ['checkout', '-q', that.url, where], {stdio: 'inherit'});
+		checkout.on('error', reject);
+		checkout.on('close', function (code) {
+			if (code > 0) {
+				reject('SVN exited with non-zero code!');
+			} else {
+				resolve(true);
+			}
+		});
+	});
 };
