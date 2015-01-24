@@ -77,7 +77,7 @@ VcsResource.prototype.install = function (where) {
 	switch (this.vcs) {
 		case 'git':
 			return new NPromise(function (resolve, reject) {
-				var clone = spawn('git', ['clone', that.url, where], {stdio: 'inherit'});
+				var clone = spawn('git', ['clone', '-q', that.url, where], {stdio: 'inherit'});
 				clone.on('error', reject);
 				clone.on('close', function (code) {
 					if (code > 0) {
@@ -89,7 +89,7 @@ VcsResource.prototype.install = function (where) {
 			});
 		case 'svn':
 			return new NPromise(function (resolve, reject) {
-				var checkout = spawn('svn', ['checkout', that.url, where], {stdio: 'inherit'});
+				var checkout = spawn('svn', ['checkout', '-q', that.url, where], {stdio: 'inherit'});
 				checkout.on('error', reject);
 				checkout.on('close', function (code) {
 					if (code > 0) {
