@@ -17,12 +17,12 @@ function _exit(code, msg) {
 	if (isNaN(code)) {
 		code = 0;
 	}
-	msg += '\n';
+	msg += '';
 	if (msg) {
 		if (code) {
-			process.stderr.write(msg);
+			util.error(msg);
 		} else {
-			process.stdout.write(msg);
+			util.debug(msg);
 		}
 	}
 	process.exit(code);
@@ -33,6 +33,7 @@ function doImport(configuration) {
 	if (!configuration) {
 		_exit(1, 'No configuration specified!');
 	}
+	util.print(util.format('Starting import of %s\n', configuration));
 	resolve(configuration).then(parseConfig, function (thing) {
 		if (util.isError(thing)) {
 			thing = thing.message;
@@ -95,9 +96,11 @@ function parseConfig(thing) {
 		};
 	};
 
+	util.print('Fetching dev resources...\n');
 	for (x = 0; x < data.dev_resources.length; x += 1) {
 		try {
 			var resource = new resources.VcsResource(data.dev_resources[x]);
+			util.print(util.format('Fetching %s...\n', resource.name));
 			mkdirp(path.dirname(path.join(project, resource.path)), installProcedure(resource));
 		} catch (e) {
 			_exit(1, e);
