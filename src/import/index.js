@@ -73,14 +73,9 @@ function parseConfig(thing) {
 	}
 	var projects = path.join(vm.root, 'projects'),
 			project = path.join(projects, data.name),
-			cache = path.join(vm.root, '_cache'),
-			errorCase = function (err) {
-				if (err) {
-					_exit(1, 'Could not create path!\n' + err + '\n');
-				}
-			};
-	mkdirp(project, errorCase);
-	mkdirp(cache, errorCase);
+			cache = path.join(vm.root, '_cache');
+	mkdirp.sync(project);
+	mkdirp.sync(cache);
 
 	util.print('Fetching dev resources...\n');
 	var resourcePromises = [];
