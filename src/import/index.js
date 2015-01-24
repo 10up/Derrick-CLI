@@ -3,7 +3,8 @@ var util = require('util'),
 		resolve = require('./resolve'),
 		VM = require('../vm'),
 		mkdirp = require('mkdirp'),
-		resources = require('../resources');
+		resources = require('../resources'),
+		NPromise = require('promise');
 
 module.exports = doImport;
 
@@ -81,29 +82,21 @@ function parseConfig(thing) {
 	mkdirp(project, errorCase);
 	mkdirp(cache, errorCase);
 
-	var installProcedure = function (resource) {
-		return function (err) {
-			if (err) {
-				_exit(1, err);
-			}
-			try {
-				resource.install(path.join(project, resource.path)).then(null, function (err) {
-					_exit(1, err);
-				});
-			} catch (e) {
-				_exit(1, e);
-			}
-		};
-	};
-
 	util.print('Fetching dev resources...\n');
+	var resourcePromises = [];
 	for (x = 0; x < data.dev_resources.length; x += 1) {
 		try {
 			var resource = new resources.VcsResource(data.dev_resources[x]);
+			mkdirp.sync(path.dirname(path.join(project, resource.path)));
 			util.print(util.format('Fetching %s...\n', resource.name));
-			mkdirp(path.dirname(path.join(project, resource.path)), installProcedure(resource));
+			resourcePromises.push(resource.install(path.join(project, resource.path)));
 		} catch (e) {
 			_exit(1, e);
 		}
 	}
+	NPromise.all(resourcePromises).then(function (res) {
+		console.log('Successes:', res);
+	}, function (res) {
+		_exit(1, util.format('Not all dev resources could be installed!\n%s\n', res));
+	});
 }
