@@ -77,11 +77,17 @@ function parseConfig(thing) {
 	mkdirp.sync(project);
 	mkdirp.sync(cache);
 
+	installDevResources(data.dev_resources, project);
+}
+
+function installDevResources(rawResources, project) {
+	"use strict";
 	util.print('Fetching dev resources...\n');
-	var resourcePromises = [];
+	var resourcePromises = [],
+			x;
 	try {
-		for (x = 0; x < data.dev_resources.length; x += 1) {
-			var resource = resources.VcsResource.newFromVcs(data.dev_resources[x]);
+		for (x = 0; x < rawResources.length; x += 1) {
+			var resource = resources.VcsResource.newFromVcs(rawResources[x]);
 			mkdirp.sync(path.dirname(path.join(project, resource.path)));
 			util.print(util.format('Fetching %s...\n', resource.name));
 			resourcePromises.push(resource.install(path.join(project, resource.path)));
