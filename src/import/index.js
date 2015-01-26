@@ -71,13 +71,30 @@ function parseConfig(thing) {
 	} catch (e) {
 		_exit_error('Error: ' + e + '\n');
 	}
-	var projects = path.join(vm.root, 'projects'),
-			project = path.join(projects, data.name),
-			cache = path.join(vm.root, '_cache');
-	mkdirp.sync(project);
-	mkdirp.sync(cache);
 
-	installDevResources(data.dev_resources, project);
+	ensureProjectDirectory(vm, data).then(runProjectImport(data, vm), _exit_error);
+}
+
+function runProjectImport(data) {
+	"use strict";
+	return function () {
+		installDevResources(data.dev_resources, data.project);
+	};
+}
+
+function ensureProjectDirectory(vm, data) {
+	"use strict";
+	var mkdir = NPromise.denodeify(mkdirp);
+	return new NPromise(function (resolve, reject) {
+		var projects = path.join(vm.root, 'projects'),
+				project = path.join(projects, data.name),
+				cache = path.join(vm.root, '_cache'),
+				done = function () {
+					resolve(true);
+				};
+		data.project = project;
+		NPromise.all([mkdir(project), mkdir(cache)]).then(done, done);
+	});
 }
 
 function installDevResources(rawResources, project) {
