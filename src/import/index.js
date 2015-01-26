@@ -29,18 +29,18 @@ function _exit(code, msg) {
 	process.exit(code);
 }
 
+function _exit_error(msg) {
+	"use strict";
+	_exit(1, msg);
+}
+
 function doImport(configuration) {
 	'use strict';
 	if (!configuration) {
-		_exit(1, 'No configuration specified!');
+		_exit_error('No configuration specified!');
 	}
 	util.print(util.format('Starting import of %s\n', configuration));
-	resolve(configuration).then(parseConfig, function (thing) {
-		if (util.isError(thing)) {
-			thing = thing.message;
-		}
-		_exit(1, thing + '\n');
-	});
+	resolve(configuration).then(parseConfig, _exit_error);
 }
 
 function parseConfig(thing) {
@@ -49,7 +49,7 @@ function parseConfig(thing) {
 	try {
 		data = JSON.parse(thing);
 	} catch (e) {
-		_exit(1, 'Could not parse JSON!\n\n' +
+		_exit_error('Could not parse JSON!\n\n' +
 		'Error message:\n' + e + '\n');
 	}
 	var requiredFields = [
@@ -62,14 +62,14 @@ function parseConfig(thing) {
 			x = 0;
 	for (; x < requiredFields.length; x += 1) {
 		if (undefined === data[requiredFields[x]]) {
-			_exit(1, util.format('%s is a required field!\n', requiredFields[x]));
+			_exit_error(util.format('%s is a required field!\n', requiredFields[x]));
 		}
 	}
 	var vm;
 	try {
 		vm = new VM(process.cwd());
 	} catch (e) {
-		_exit(1, 'Error: ' + e + '\n');
+		_exit_error('Error: ' + e + '\n');
 	}
 	var projects = path.join(vm.root, 'projects'),
 			project = path.join(projects, data.name),
@@ -98,6 +98,6 @@ function installDevResources(rawResources, project) {
 	NPromise.all(resourcePromises).then(function (res) {
 		console.log('Successes:', res);
 	}, function (res) {
-		_exit(1, util.format('Not all dev resources could be installed!\n%s\n', res));
+		_exit_error(util.format('Not all dev resources could be installed!\n%s\n', res));
 	});
 }
