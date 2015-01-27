@@ -125,6 +125,21 @@ function installDevResources(rawResources, project) {
 
 function installVendorResources(vendorResources) {
 	"use strict";
+	var resourcePromises = [],
+			x,
+			all;
+	try {
+		for (x = 0; x < vendorResources.length; x += 1) {
+			// TODO: import resources
+		}
+	} catch (e) {
+		// do nothing
+	}
+	all = NPromise.all(resourcePromises);
+	all.then(null, function (res) {
+		_exit_error(util.format('Not all dev resources could be installed!\n%s\n', res));
+	});
+	return all;
 }
 
 function createDatabase(name) {
