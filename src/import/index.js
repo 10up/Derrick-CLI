@@ -78,7 +78,9 @@ function parseConfig(thing) {
 function runProjectImport(data) {
 	"use strict";
 	return function () {
-		installDevResources(data.dev_resources, data.project);
+		NPromise.all([
+			installDevResources(data.dev_resources, data.project)
+		]);
 	};
 }
 
@@ -112,9 +114,9 @@ function installDevResources(rawResources, project) {
 	} catch (e) {
 		// do nothing
 	}
-	NPromise.all(resourcePromises).then(function (res) {
-		console.log('Successes:', res);
-	}, function (res) {
+	var all = NPromise.all(resourcePromises);
+	all.then(null, function (res) {
 		_exit_error(util.format('Not all dev resources could be installed!\n%s\n', res));
 	});
+	return all;
 }
