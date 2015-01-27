@@ -79,7 +79,8 @@ function runProjectImport(data) {
 	"use strict";
 	return function () {
 		NPromise.all([
-			installDevResources(data.dev_resources, data.project)
+			installDevResources(data.dev_resources, data.project),
+			createDatabase(data.name)
 		]);
 	};
 }
@@ -119,4 +120,28 @@ function installDevResources(rawResources, project) {
 		_exit_error(util.format('Not all dev resources could be installed!\n%s\n', res));
 	});
 	return all;
+}
+
+function createDatabase(name) {
+	"use strict";
+	return new NPromise(function (resolve, reject) {
+		try {
+			var socket = require('..').connect();
+			socket.on('success', function () {
+				socket.close();
+				resolve(true);
+			});
+			socket.on('error', function (e) {
+				socket.close();
+				reject(e);
+			});
+			setTimeout(function () {
+				socket.close();
+				reject('Request timed out');
+			}, 10000);
+			socket.emit('create_db', {name: name});
+		} catch (e) {
+			reject(e);
+		}
+	});
 }
