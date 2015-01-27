@@ -80,6 +80,7 @@ function runProjectImport(data) {
 	return function () {
 		NPromise.all([
 			installDevResources(data.dev_resources, data.project),
+			installVendorResources(data.vendor_resources),
 			createDatabase(data.name)
 		]);
 	};
@@ -120,6 +121,10 @@ function installDevResources(rawResources, project) {
 		_exit_error(util.format('Not all dev resources could be installed!\n%s\n', res));
 	});
 	return all;
+}
+
+function installVendorResources(vendorResources) {
+	"use strict";
 }
 
 function createDatabase(name) {
