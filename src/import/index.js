@@ -127,10 +127,11 @@ function installVendorResources(vendorResources) {
 	"use strict";
 	var resourcePromises = [],
 			x,
-			all;
+			all,
+			resource;
 	try {
 		for (x = 0; x < vendorResources.length; x += 1) {
-			// TODO: import resources
+			resource = resources.Resource.newFromData(vendorResources[x]);
 		}
 	} catch (e) {
 		// do nothing

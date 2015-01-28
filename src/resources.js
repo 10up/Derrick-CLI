@@ -1,4 +1,5 @@
 var path = require('path'),
+		url = require('url'),
 		NPromise = require('promise'),
 		spawn = require('child_process').spawn;
 
@@ -51,6 +52,16 @@ Resource.prototype.location = '';
 Resource.prototype.install = function (where) {
 	"use strict";
 	console.log(where);
+};
+
+Resource.newFromData = function (data) {
+	"use strict";
+	if (data.vcs) {
+		return VcsResource.newFromVcs(data);
+	} else if (/\.(zip|tar(\.gz)?)$/.test(url.parse(data.url).pathname)) {
+		return new ArchiveResource(data);
+	}
+	return new Resource(data);
 };
 
 function VcsResource(info) {
@@ -141,5 +152,20 @@ SvnResource.prototype.install = function (where) {
 				resolve(true);
 			}
 		});
+	});
+};
+
+function ArchiveResource(info) {
+	"use strict";
+	Resource.call(this, info);
+}
+
+ArchiveResource.prototype = Object.create(Resource.prototype);
+ArchiveResource.prototype.constructor = ArchiveResource;
+ArchiveResource.prototype.install = function (where) {
+	"use strict";
+	var that = this;
+	return new NPromise(function (resolve, reject) {
+
 	});
 };
