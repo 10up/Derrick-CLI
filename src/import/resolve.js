@@ -1,59 +1,59 @@
-var NPromise = require('promise');
+var NPromise = require( 'promise' );
 
 module.exports = resolveConfigFile;
 
-function resolveConfigFile(config) {
+function resolveConfigFile( config ) {
 	'use strict';
-	return /^(https?):\/\//.test(config) ?
-			resolveRemoteConfigFile(config) :
-			resolveLocalConfigFile(config);
+	return /^(https?):\/\//.test( config ) ?
+		resolveRemoteConfigFile( config ) :
+		resolveLocalConfigFile( config );
 }
 
-function resolveRemoteConfigFile(config) {
+function resolveRemoteConfigFile( config ) {
 	'use strict';
 	var transport,
-			url = require('url').parse(config),
-			opts;
-	transport = require(url.protocol.replace(/:$/, ''));
+		url = require( 'url' ).parse( config ),
+		opts;
+	transport = require( url.protocol.replace( /:$/, '' ) );
 	opts = {
 		hostname: url.hostname,
 		path    : url.path
 	};
-	if (url.port) {
+	if ( url.port ) {
 		opts.port = url.port;
 	}
-	if (url.auth) {
+	if ( url.auth ) {
 		opts.auth = url.auth;
 	}
-	return new NPromise(function (resolve, reject) {
-		var request = transport.request(opts, function (response) {
+	return new NPromise( function ( resolve, reject ) {
+		var request = transport.request( opts, function ( response ) {
 			var data;
-			response.on('data', function (chunk) {
-				data += chunk.toString('utf8');
-			});
-			response.on('end', function () {
-				if (data) {
-					resolve(data.toString('utf8'));
+			response.on( 'data', function ( chunk ) {
+				data += chunk.toString( 'utf8' );
+			} );
+			response.on( 'end', function () {
+				if ( data ) {
+					resolve( data.toString( 'utf8' ) );
 				} else {
-					reject('No data received!');
+					reject( 'No data received!' );
 				}
-			});
-		});
-		request.on('error', reject);
+			} );
+		} );
+		request.on( 'error', reject );
 		request.end();
-	});
+	} );
 }
 
-function resolveLocalConfigFile(config) {
+function resolveLocalConfigFile( config ) {
 	'use strict';
-	var fs = require('fs');
-	return new NPromise(function (resolve, reject) {
-		fs.readFile(config, {encoding: 'utf8'}, function (err, data) {
-			if (err) {
-				reject(err);
+	var fs = require( 'fs' );
+	return new NPromise( function ( resolve, reject ) {
+		fs.readFile( config, {encoding: 'utf8'}, function ( err, data ) {
+			if ( err ) {
+				reject( err );
 			} else {
-				resolve(data);
+				resolve( data );
 			}
-		});
-	});
+		} );
+	} );
 }
