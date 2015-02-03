@@ -28,6 +28,7 @@
   "dependencies": {
     "flatiron": "^0.1.7",
     "winston": "^0.8.3",
+    "cli-spinner": "^0.2.0",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "promise": "^6.1.0",
