@@ -26,13 +26,14 @@
     "moonshine": "./bin/moonshine"
   },
   "dependencies": {
-    "flatiron": "^0.1.7",
-    "winston": "^0.8.3",
     "cli-spinner": "^0.2.0",
+    "deferred": "^0.7.2",
+    "flatiron": "^0.1.7",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "promise": "^6.1.0",
-    "deferred": "^0.7.2",
-    "socket.io-client": "^1.2.1"
+    "socket.io-client": "^1.2.1",
+    "temp": "^0.8.1",
+    "winston": "^0.8.3"
   }
 }
