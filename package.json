@@ -29,6 +29,7 @@
     "cli-spinner": "^0.2.0",
     "deferred": "^0.7.2",
     "flatiron": "^0.1.7",
+    "lodash": "^3.3.1",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "mustache": "^1.1.0",
