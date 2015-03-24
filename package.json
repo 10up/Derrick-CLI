@@ -29,7 +29,7 @@
   "dependencies": {
     "cli-spinner": "^0.2.0",
     "deferred": "^0.7.2",
-    "flatiron": "^0.1.7",
+    "flatiron": "^0.4.3",
     "lodash": "^3.3.1",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
@@ -42,6 +42,6 @@
     "tar": "^1.0.3",
     "temp": "^0.8.1",
     "unzip": "^0.1.11",
-    "winston": "^0.8.3"
+    "winston": "^0.9.0"
   }
 }
