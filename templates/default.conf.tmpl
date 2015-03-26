@@ -60,6 +60,9 @@ server {
         # be sure that it exists.
         fastcgi_param   SCRIPT_FILENAME         $document_root$fastcgi_script_name;
 
+        # Stop random 499 errors on closed connections
+        fastcgi_ignore_client_abort on;
+
         # pass to upstream PHP through port 9000
         fastcgi_pass   php:9000;
 
