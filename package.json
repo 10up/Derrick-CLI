@@ -1,7 +1,7 @@
 {
-  "name": "moonshine-cli",
+  "name": "derrick-cli",
   "version": "0.1.0",
-  "description": "Command line interface to moonshine",
+  "description": "Command line interface to Derrick Server",
   "main": "./src/index.js",
   "scripts": {
     "build:bin": "jshint bin/",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:johnpbloch/moonshine-cli.git"
+    "url": "git@github.com:10up/Derrick-CLI.git"
   },
   "author": "",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "watch": "^0.13.0"
   },
   "bin": {
-    "moonshine": "./bin/moonshine"
+    "moonshine": "./bin/derrick"
   },
   "dependencies": {
     "cli-spinner": "^0.2.0",
