@@ -24,7 +24,7 @@
     "watch": "^0.13.0"
   },
   "bin": {
-    "moonshine": "./bin/derrick"
+    "derrick": "./bin/derrick"
   },
   "dependencies": {
     "cli-spinner": "^0.2.0",
