@@ -15,7 +15,33 @@
     "type": "git",
     "url": "git@github.com:10up/Derrick-CLI.git"
   },
-  "author": "",
+  "author": {
+    "name": "Eric Mann",
+    "email": "eric.mann@10up.com",
+    "url": "http://10up.com"
+  },
+  "contributors": [
+    {
+      "name": "Luke Woodward",
+      "email": "luke.woodward@10up.com",
+      "url": "https://github.com/lkwdwrd"
+    },
+    {
+      "name": "Eric Mann",
+      "email": "eric.mann@10up.com",
+      "url": "https://github.com/ericmann"
+    },
+    {
+      "name": "John Bloch",
+      "email": "john.bloch@10up.com",
+      "url": "https://github.com/johnpbloch"
+    },
+    {
+      "name": "Taylor Lovett",
+      "email": "taylor.lovett@10up.com",
+      "url": "https://github.com/tlovett1"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "jshint": "^2.5.11",
