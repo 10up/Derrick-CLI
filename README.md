@@ -43,3 +43,7 @@ Export the current state of a project. If your current working directory is not 
 
  * 2015-04-14   v0.1.1   Add progress indicators (for downloads) and update create/export commands
  * 2015-04-14   v0.1.0   Initial release
+
+## Copyright / License
+
+Derrick CLI is copyright (c) 2015 by [10up](http://10up.com) and its various contributors under the terms of the MIT license.
