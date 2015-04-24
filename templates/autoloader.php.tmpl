@@ -1,0 +1,28 @@
+<?php
+/**
+ * MU-Plugin Autoloader
+ *
+ * @author Eric Mann <eric@eamann.com>
+ * @license MIT
+ * @copyright 2015 Eric Mann
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$paths = scandir( dirname( __FILE__ ) );
+$paths = array_diff( $paths, array( '..', '.' ) );
+
+foreach( $paths as $maybe_plugin ) {
+	if ( strpos( $maybe_plugin, '.php' ) != 0 ) {
+		continue;
+	}
+
+	// Attempt to get the loader file.
+	$core_file = WPMU_PLUGIN_DIR . "/{$maybe_plugin}/{$maybe_plugin}.php";
+
+	if ( file_exists( $core_file ) ) {
+		require_once $core_file;
+	}
+}
