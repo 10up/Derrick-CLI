@@ -41,6 +41,7 @@ Export the current state of a project. If your current working directory is not 
 
 ### Release History
 
+ * 2015-04-24   v0.1.2   Add support for MU-plugins. Mount the entire /src and /vendor directories so projects can be more easily added. Better auto-detection of repos for export
  * 2015-04-14   v0.1.1   Add progress indicators (for downloads) and update create/export commands
  * 2015-04-14   v0.1.0   Initial release
 
