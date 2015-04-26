@@ -21,7 +21,13 @@ After installing Derrick Server, you'll be able to work with projects using Derr
 derrick import <manifest.json>
 ```
 
-Imports a project defined in the manifest file. Manifests maybe local or remote
+Imports a project defined in the manifest file. Manifests maybe local or remote.
+
+If running this against a local repository, you can automatically add a (similarly) local Satis cache for Composer repositories by affixing a `--satis` flag.
+
+```bash
+derrick import <manifest.json> --satis http://host.dev:4680
+```
 
 #### Create
 
