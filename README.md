@@ -48,7 +48,7 @@ Export the current state of a project. If your current working directory is not 
 ### Release History
 
  * 2015-04-25   v0.1.2   Add MU-plugins. Mount the entire /src and /vendor dirs
- * 2015-04-14   v0.1.1   Add progress indicators (for downloads) and update create/export commands
+ * 2015-04-14   v0.1.1   Add download progress and update create/export commands
  * 2015-04-14   v0.1.0   Initial release
 
 ## Copyright / License
