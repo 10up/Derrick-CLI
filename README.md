@@ -47,6 +47,7 @@ Export the current state of a project. If your current working directory is not 
 
 ### Release History
 
+ * 2015-04-28   v0.2.1   Fix an issue with tar.gz and switch to an overlayFS for project mounting
  * 2015-04-27   v0.2.0   Enable status checking, both globally and on a project basis
  * 2015-04-26   v0.1.3   Revert a broken dependency and correct a fatal typo
  * 2015-04-25   v0.1.2   Add MU-plugins. Mount the entire /src and /vendor dirs
