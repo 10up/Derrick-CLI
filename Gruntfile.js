@@ -34,7 +34,6 @@ module.exports = function( grunt ) {
 			test: {
 				options: {
 					reporter: 'spec',
-					captureFile: 'results.txt',
 					quiet: false,
 					clearRequireCache: true
 				},
