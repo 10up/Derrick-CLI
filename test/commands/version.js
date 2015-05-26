@@ -68,7 +68,8 @@ describe( 'version', function() {
 				'../commands': commandsStub,
 				'../app': appStub,
 				'../../package.json': packageStub
-			} );
+			}
+		);
 
 		// Verify
 		assert.equal( 'version', regex.source );
