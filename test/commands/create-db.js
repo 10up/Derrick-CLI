@@ -13,7 +13,7 @@ var proxyquire = require( 'proxyquire' ).noCallThru(),
  */
 var winstonStub = { cli: function() { return { log: function() {} }; } },
 	commandStub = {},
-	promiseStub = {},
+	promiseStub = function( callback ) { return callback; },
 	commandsStub = {},
 	appStub = { cmd: function() {} };
 
@@ -81,7 +81,7 @@ describe( 'create-db', function() {
 				{
 					'winston': winstonStub,
 					'../commands': commandsStub,
-					'../app': appStub,
+					'../app': appStub
 				}
 			);
 			(new createDB()).run( '', undefined, '' );
@@ -168,6 +168,81 @@ describe( 'create-db', function() {
 			assert.equal( 'testdb', database );
 			assert.equal( 'testuser', username );
 			assert.equal( 'testpass', password );
+		} );
+	} );
+
+	describe( 'createDatabase', function() {
+		it( 'Should invoke create-db on server', function( done ) {
+			// Setup
+			var command = '', params ='';
+			commandStub = function( c, p ) {
+				command = c;
+				params = p;
+
+				return {
+					on: function( event, callback ) {},
+					done: function( callback ) { callback(); }
+				};
+			};
+
+			// Test
+			var createDB = proxyquire(
+					'../../lib/commands/create-db',
+					{
+						'winston'    : winstonStub,
+						'../commands': commandsStub,
+						'../app'     : appStub,
+						'../command' : commandStub,
+						'promise'    : promiseStub
+					}
+				),
+				databaseCallback = ( new createDB() ).createDatabase( 'test', 'test', 'test' );
+
+			// Verify - Since the createDatabase command is a promise, we pass our tests through to the fulfill() method in our stub Promise object
+			databaseCallback( function() {
+				assert.equal( 'create-db', command );
+				assert.deepEqual( { 'database': 'test', 'username': 'test', 'password': 'test' }, params );
+
+				done();
+			} );
+		} );
+
+		it( 'Should react to progress events from the server', function( done ) {
+			// Setup
+			var command = '', params ='', progress = false;
+			commandStub = function( c, p ) {
+				command = c;
+				params = p;
+
+				return {
+					on: function( event, callback ) {
+						if ( 'progress' === event ) {
+							progress = true;
+						}
+					},
+					done: function( callback ) { callback(); }
+				};
+			};
+
+			// Test
+			var createDB = proxyquire(
+					'../../lib/commands/create-db',
+					{
+						'winston'    : winstonStub,
+						'../commands': commandsStub,
+						'../app'     : appStub,
+						'../command' : commandStub,
+						'promise'    : promiseStub
+					}
+				),
+				databaseCallback = ( new createDB() ).createDatabase( 'test', 'test', 'test' );
+
+			// Verify
+			databaseCallback( function() {
+				assert.ok( progress );
+
+				done();
+			} );
 		} );
 	} );
 
