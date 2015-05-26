@@ -44,8 +44,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-mocha-test": "^0.12.7",
     "jshint": "^2.5.11",
-    "parallelshell": "^1.0.3",
+    "matchdep": "^0.3.0",
+    "mocha": "^2.2.5",
+    "proxyquire": "^1.5.0",
     "tar.gz": "^0.1.1",
     "watch": "^0.13.0"
   },
