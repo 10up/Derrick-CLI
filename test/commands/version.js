@@ -72,10 +72,7 @@ describe( 'version', function() {
 		);
 
 		// Verify
-		assert.equal( 'version', regex.source );
-		assert.ok( ! regex.global );
-		assert.ok( ! regex.ignoreCase );
-		assert.ok( ! regex.multiline );
+		assert.equal( 0, regex.source.indexOf( 'version' ) );
 		assert.strictEqual( commandsStub.version, callback );
 	} );
 } );
