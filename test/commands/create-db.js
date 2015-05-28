@@ -22,7 +22,7 @@ var winstonStub = { cli: function() { return { log: function() {} }; } },
  */
 describe( 'create-db', function() {
 	describe( 'run', function() {
-		it( 'Should requires db_name', function() {
+		it( 'Should require db_name', function() {
 			// Setup
 			var _exit = process.exit;
 			process.exit = function() {};
@@ -59,7 +59,7 @@ describe( 'create-db', function() {
 			process.exit = _exit;
 		} );
 
-		it( 'Should requires username', function() {
+		it( 'Should require username', function() {
 			// Setup
 			var _exit = process.exit;
 			process.exit = function() {};
@@ -96,7 +96,7 @@ describe( 'create-db', function() {
 			process.exit = _exit;
 		} );
 
-		it( 'Should requires password', function() {
+		it( 'Should require password', function() {
 			// Setup
 			var _exit = process.exit;
 			process.exit = function() {};
