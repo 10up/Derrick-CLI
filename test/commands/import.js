@@ -72,67 +72,81 @@ describe( 'import', function() {
 	} );
 
 	describe( 'importUploads', function() {
+		it( 'Should download assets' );
 
+		it( 'Should unzip a compressed file' );
+
+		it( 'Should untar a tarfile' );
 	} );
 
 	describe( 'importDatabase', function() {
-
+		it( 'Should invoke the importDB command' );
 	} );
 
 	describe( 'createAutoloader', function() {
-
+		it( 'Should populate a template' );
 	} );
 
 	describe( 'createConfigFile', function() {
-
+		it( 'Should populate a template' );
 	} );
 
 	describe( 'createNginxConfigs', function() {
-
+		it( 'Should populate templates' );
 	} );
 
 	describe( 'mountFilesystem', function() {
-
+		it( 'Should invoke the server mount-fs command' );
 	} );
 
 	describe( 'runImport', function() {
+		it( 'Should batch the install and template commands' );
 
+		it( 'Should mount filesystems' );
 	} );
 
 	describe( 'createLockFile', function() {
-
+		it( 'Should create the manifest lockfile' );
 	} );
 
 	describe( 'storeHostsMap', function() {
+		it( 'Should create a new hostmap file' );
 
+		it( 'Should update an existing hostmap file' );
 	} );
 
 	describe( 'createAliases', function() {
-
+		it( 'Should create CLI aliases' );
 	} );
 
 	describe( 'writeCompiledData', function() {
+		it( 'Should create the lockfile' );
 
+		it( 'Should store the hosts file' );
+
+		it( 'Should create command aliaes' );
 	} );
 
 	describe( 'create_chain', function() {
-
+		it( 'Should create the Docker chain on the server' );
 	} );
 
 	describe( 'update_hosts', function() {
+		it( 'Should create a new aliases file' );
 
+		it( 'Should update an existing aliases file' );
 	} );
 
 	describe( 'resync_hosts', function() {
-
+		it( 'Should invoke vagrant ghost' );
 	} );
 
 	describe( 'import_file', function() {
-
+		it( 'Should import a static manifest.json file' );
 	} );
 
 	describe( 'import_json', function() {
-
+		it( 'Should import a JSON object as if it were a manifest file' );
 	} );
 
 	it( 'Should register an import command' );
