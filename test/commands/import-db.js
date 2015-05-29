@@ -15,6 +15,8 @@ var winstonStub = { cli: function() { return { log: function() {} }; } },
 	commandStub = {},
 	promiseStub = function( callback ) { return callback; },
 	commandsStub = {},
+	VMStub = {},
+	tempStub = { createWriteStream: function() {} },
 	appStub = { cmd: function() {} };
 
 /**
@@ -46,6 +48,7 @@ describe( 'import-db', function() {
 					'winston': winstonStub,
 					'../commands': commandsStub,
 					'../app': appStub,
+					'../vm': VMStub
 				}
 			);
 			
@@ -59,6 +62,94 @@ describe( 'import-db', function() {
 
 			// Reset
 			process.exit = _exit;
+		} );
+	} );
+
+	describe( 'maybeDownloadFile', function() {
+		it( 'Should download remote file', function() {
+			var _exit = process.exit;
+			process.exit = function() {};
+			var errors = [], info = [];
+			
+			winstonStub.cli = function() {
+				return {
+					'error': function( message, meta ) {
+						errors.push( meta.code );
+					},
+					'info': function( message ) {
+						info.push( message );
+					}
+				};
+			};
+
+			var startDownload = false;
+
+			var downloadStub = function() {
+				startDownload = true;
+			};
+				
+			var importDB = proxyquire(
+				'../../lib/commands/import-db',
+				{
+					'winston': winstonStub,
+					'../commands': commandsStub,
+					'../app': appStub,
+					'../download': downloadStub,
+					'../temp': tempStub
+				}
+			);
+
+			importDB.maybeDownloadFile( 'http://google.com' );
+
+			// URL should not be downloaded
+			assert.equal( startDownload, true );
+
+			// Reset
+			process.exit = _exit;
+
+		} );
+
+		it( 'Should not download local file', function() {
+			var _exit = process.exit;
+			process.exit = function() {};
+			var errors = [], info = [];
+			
+			winstonStub.cli = function() {
+				return {
+					'error': function( message, meta ) {
+						errors.push( meta.code );
+					},
+					'info': function( message ) {
+						info.push( message );
+					}
+				};
+			};
+
+			var startDownload = false;
+
+			var downloadStub = function() {
+				startDownload = true;
+			};
+				
+			var importDB = proxyquire(
+				'../../lib/commands/import-db',
+				{
+					'winston': winstonStub,
+					'../commands': commandsStub,
+					'../app': appStub,
+					'../download': downloadStub,
+					'../temp': tempStub
+				}
+			);
+
+			importDB.maybeDownloadFile( 'test.log' );
+
+			// File should be downloaded
+			assert.equal( startDownload, false );
+
+			// Reset
+			process.exit = _exit;
+
 		} );
 	} );
 } );
