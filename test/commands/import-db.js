@@ -16,6 +16,8 @@ var winstonStub = { cli: function() { return { log: function() {} }; } },
 	promiseStub = function( callback ) { return callback; },
 	commandsStub = {},
 	VMStub = {},
+	fsStub = { createReadStream: function() {} },
+	zlibStub = { createUnzip: function() {} },
 	tempStub = { createWriteStream: function() {} },
 	appStub = { cmd: function() {} };
 
@@ -137,8 +139,7 @@ describe( 'import-db', function() {
 					'winston': winstonStub,
 					'../commands': commandsStub,
 					'../app': appStub,
-					'../download': downloadStub,
-					'../temp': tempStub
+					'../download': downloadStub
 				}
 			);
 
@@ -146,6 +147,114 @@ describe( 'import-db', function() {
 
 			// File should be downloaded
 			assert.equal( startDownload, false );
+
+			// Reset
+			process.exit = _exit;
+
+		} );
+	} );
+
+	describe( 'maybeDecompressFile', function() {
+		it( 'Should not decompress file', function() {
+			var _exit = process.exit;
+			process.exit = function() {};
+			var errors = [], info = [];
+			
+			winstonStub.cli = function() {
+				return {
+					'error': function( message, meta ) {
+						errors.push( meta.code );
+					},
+					'info': function( message ) {
+						info.push( message );
+					}
+				};
+			};
+
+			var decompress = false;
+
+			var tempStub = {
+				createWriteStream: function() {
+
+				}
+			};
+
+			var fsStub = {
+				createReadStream: function() {
+					decompress = true;
+				}
+			};
+				
+			var importDB = proxyquire(
+				'../../lib/commands/import-db',
+				{
+					'winston': winstonStub,
+					'../commands': commandsStub,
+					'../app': appStub,
+					'../temp': tempStub,
+					'fs': fsStub,
+					'zlib': zlibStub
+				}
+			);
+
+			importDB.maybeDecompressFile( 'test.log' );
+
+			// File should not be decompressed
+			assert.equal( decompress, false );
+
+			// Reset
+			process.exit = _exit;
+
+		} );
+
+		it( 'Should decompress file', function() {
+			var _exit = process.exit;
+			process.exit = function() {};
+			var errors = [], info = [];
+			
+			winstonStub.cli = function() {
+				return {
+					'error': function( message, meta ) {
+						errors.push( meta.code );
+					},
+					'info': function( message ) {
+						info.push( message );
+					}
+				};
+			};
+
+			var decompress = false;
+
+			var tempStub = {
+				createWriteStream: function() {
+					return {
+						on: function() {}
+					};
+				}
+			};
+
+			var fsStub = {
+				createReadStream: function() {
+					decompress = true;
+				}
+			};
+				
+			var importDB = proxyquire(
+				'../../lib/commands/import-db',
+				{
+					'winston': winstonStub,
+					'../commands': commandsStub,
+					'../app': appStub,
+					'../temp': tempStub,
+					'fs': fsStub,
+					'zlib': zlibStub
+				}
+			);
+
+			importDB.maybeDecompressFile( 'test.gz' );
+
+			// File should not be decompressed
+			assert.equal( decompress, true );
 
 			// Reset
 			process.exit = _exit;
