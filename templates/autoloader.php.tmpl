@@ -2,7 +2,7 @@
 /**
  * MU-Plugin Autoloader
  *
- * @author Eric Mann <eric@eamann.com>
+ * @author Eric Mann <eric@eamann.com>, Taylor Lovett <taylor.lovett@10up.com>
  * @license MIT
  * @copyright 2015 Eric Mann
  */
@@ -25,4 +25,53 @@ foreach( $paths as $maybe_plugin ) {
 	if ( file_exists( $core_file ) ) {
 		require_once $core_file;
 	}
+}
+
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	class Derrick_CLI extends WP_CLI_Command {
+
+	    /**
+	     * Prints out MU plugins as JSON
+	     * 
+	     * @subcommand get-mu-plugins
+	     */
+	    function get_mu_plugins( $args, $assoc_args ) {
+	        $plugin_root = WP_CONTENT_DIR . '/mu-plugins';
+
+	        $plugins_dir = @opendir( $plugin_root );
+			$plugin_files = array();
+
+			if ( $plugins_dir ) {
+				while (($file = readdir( $plugins_dir ) ) !== false ) {
+					if ( substr($file, 0, 1) == '.' )
+						continue;
+					if ( is_dir( $plugin_root.'/'.$file ) ) {
+						$plugins_subdir = @ opendir( $plugin_root.'/'.$file );
+						if ( $plugins_subdir ) {
+							while (($subfile = readdir( $plugins_subdir ) ) !== false ) {
+								if ( substr($subfile, 0, 1) == '.' )
+									continue;
+								if ( substr($subfile, -4) == '.php' )
+									$plugin_files[] = "$file/$subfile";
+							}
+							closedir( $plugins_subdir );
+						}
+					} else {
+						if ( substr($file, -4) == '.php' )
+							$plugin_files[] = $file;
+					}
+				}
+				closedir( $plugins_dir );
+			}
+
+			if ( false !== ( $autoloader_key = array_search( 'autoloader.php', $plugin_files ) ) ) {
+				unset( $plugin_files[$autoloader_key] );
+			}
+
+			echo json_encode( $plugin_files );
+	    }
+	}
+
+	WP_CLI::add_command( 'derrick', 'Derrick_CLI' );
 }
