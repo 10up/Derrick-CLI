@@ -244,6 +244,41 @@ describe( 'create-db', function() {
 				done();
 			} );
 		} );
+
+		it( 'Should truncate the database name', function( done ) {
+			// Setup
+			var command = '', params ='';
+			commandStub = function( c, p ) {
+				command = c;
+				params = p;
+
+				return {
+					on: function( event, callback ) {},
+					done: function( callback ) { callback(); }
+				};
+			};
+
+			// Test
+			var createDB = proxyquire(
+					'../../lib/commands/create-db',
+					{
+						'winston'    : winstonStub,
+						'../commands': commandsStub,
+						'../app'     : appStub,
+						'../command' : commandStub,
+						'promise'    : promiseStub
+					}
+				),
+				databaseCallback = ( new createDB() ).createDatabase( '0123456789ABCDEFG', 'test', 'test' );
+
+			// Verify - Since the createDatabase command is a promise, we pass our tests through to the fulfill() method in our stub Promise object
+			databaseCallback( function() {
+				assert.equal( 'create-db', command );
+				assert.deepEqual( { 'database': '0123456789ABCDEF', 'username': 'test', 'password': 'test' }, params );
+
+				done();
+			} );
+		} );
 	} );
 
 	it( 'Should register a create-db command', function() {
@@ -260,7 +295,7 @@ describe( 'create-db', function() {
 			{
 				'winston': winstonStub,
 				'../commands': commandsStub,
-				'../app': appStub,
+				'../app': appStub
 			}
 		);
 
