@@ -41,6 +41,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 	        $plugins_dir = @opendir( $plugin_root );
 			$plugin_files = array();
+			$mu_plugins = array();
 
 			if ( $plugins_dir ) {
 				while (($file = readdir( $plugins_dir ) ) !== false ) {
@@ -69,7 +70,24 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				unset( $plugin_files[$autoloader_key] );
 			}
 
-			echo json_encode( $plugin_files );
+			/**
+			 * We require plugin headers for mu plugins in order to export
+			 */
+			foreach ( $plugin_files as $plugin_file ) {
+				if ( ! is_readable( "$plugin_root/$plugin_file" ) ) {
+					continue;
+				}
+
+				$plugin_data = get_plugin_data( "$plugin_root/$plugin_file", false, false );
+
+				if ( empty( $plugin_data['Name'] ) ) {
+					continue;
+				}
+
+				$mu_plugins[plugin_basename( $plugin_file )] = $plugin_data;
+			}
+
+			echo json_encode( $mu_plugins );
 	    }
 	}
 
