@@ -89,7 +89,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 					continue;
 				}
 
-				$mu_plugins[plugin_basename( $plugin_file )] = $plugin_data;
+				$mu_plugins[] = array(
+					'name' => $plugin_data['Name'],
+					'status' => 'mu-plugin',
+					'update' => 'none',
+					'version' => ( ! empty( $plugin_data['Version'] ) ) ? $plugin_data['Version'] : '',
+				);
 			}
 
 			echo json_encode( $mu_plugins );
