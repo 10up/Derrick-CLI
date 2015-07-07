@@ -15,6 +15,14 @@ For full documentation, see the Derrick Server documentation.
 
 After installing Derrick Server, you'll be able to work with projects using Derrick CLI.
 
+#### System Requirements
+
+Since both the CLI and Derrick Server have specific system requirements, the CLI tool has a simple utility for testing and verifying your machine meets these requirements:
+
+```bash
+derrick requirements
+```
+
 #### Import
 
 ```bash
