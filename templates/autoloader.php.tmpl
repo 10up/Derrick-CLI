@@ -2,7 +2,7 @@
 /**
  * MU-Plugin Autoloader
  *
- * @author Eric Mann <eric@eamann.com>
+ * @author Eric Mann <eric@eamann.com>, Taylor Lovett <taylor.lovett@10up.com>
  * @license MIT
  * @copyright 2015 Eric Mann
  */
@@ -25,4 +25,81 @@ foreach( $paths as $maybe_plugin ) {
 	if ( file_exists( $core_file ) ) {
 		require_once $core_file;
 	}
+}
+
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	/**
+	 * WP CLI command wrapper for Derrick
+	 */
+	class Derrick_CLI extends WP_CLI_Command {
+
+	    /**
+	     * Prints out MU plugins as JSON
+	     *
+	     * @param array $args
+	     * @param array $assoc_args
+	     * @subcommand get-mu-plugins
+	     */
+	    function get_mu_plugins( $args, $assoc_args ) {
+	        $plugin_root = WP_CONTENT_DIR . '/mu-plugins';
+
+	        $plugins_dir = @opendir( $plugin_root );
+			$plugin_files = array();
+			$mu_plugins = array();
+
+			if ( $plugins_dir ) {
+				while (($file = readdir( $plugins_dir ) ) !== false ) {
+					if ( substr($file, 0, 1) == '.' )
+						continue;
+					if ( is_dir( $plugin_root.'/'.$file ) ) {
+						$plugins_subdir = @ opendir( $plugin_root.'/'.$file );
+						if ( $plugins_subdir ) {
+							while (($subfile = readdir( $plugins_subdir ) ) !== false ) {
+								if ( substr($subfile, 0, 1) == '.' )
+									continue;
+								if ( substr($subfile, -4) == '.php' )
+									$plugin_files[] = "$file/$subfile";
+							}
+							closedir( $plugins_subdir );
+						}
+					} else {
+						if ( substr($file, -4) == '.php' )
+							$plugin_files[] = $file;
+					}
+				}
+				closedir( $plugins_dir );
+			}
+
+			if ( false !== ( $autoloader_key = array_search( 'autoloader.php', $plugin_files ) ) ) {
+				unset( $plugin_files[$autoloader_key] );
+			}
+
+			/**
+			 * We require plugin headers for mu plugins in order to export
+			 */
+			foreach ( $plugin_files as $plugin_file ) {
+				if ( ! is_readable( "$plugin_root/$plugin_file" ) ) {
+					continue;
+				}
+
+				$plugin_data = get_plugin_data( "$plugin_root/$plugin_file", false, false );
+
+				if ( empty( $plugin_data['Name'] ) ) {
+					continue;
+				}
+
+				$mu_plugins[] = array(
+					'name' => $plugin_data['Name'],
+					'status' => 'mu-plugin',
+					'update' => 'none',
+					'version' => ( ! empty( $plugin_data['Version'] ) ) ? $plugin_data['Version'] : '',
+				);
+			}
+
+			echo json_encode( $mu_plugins );
+	    }
+	}
+
+	WP_CLI::add_command( 'derrick', 'Derrick_CLI' );
 }
